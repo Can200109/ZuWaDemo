@@ -1,12 +1,4 @@
-##指定使用哪一个配置文件
-##指定开发环境
+
 spring:
   profiles:
     active: dev
-##指定开发生产环境
-#spring:
-#  profiles:
-#    active: pro
-#spring:
-#  profiles:
-#    active: 0
