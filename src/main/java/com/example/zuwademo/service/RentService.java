@@ -1,0 +1,36 @@
+package com.example.zuwademo.service;
+
+import com.example.zuwademo.entity.Rent;
+import com.example.zuwademo.repository.RentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class RentService {
+    @Autowired
+    private RentRepository rentRepository;
+
+    public Rent deleteRentByPhoneNumber(Rent rent) {
+        rent = rentRepository.deleteByPhoneNumber(rent.getPhoneNumber());
+        return rent;
+    }
+
+    public List<Rent> findAllRents() {
+        return rentRepository.findAll();
+    }
+
+    public List<Rent> findRentByPhoneNumber(Rent rent) {
+        List<Rent> rents = (List<Rent>) rentRepository.findByPhoneNumber(rent.getPhoneNumber());
+        return rents;
+    }
+
+    public Rent addRent(Rent rent) {
+        if (rent.getRentId() == null || "".equals(rent.getRentId())) {
+            rent.setRentId(UUID.randomUUID().toString());
+        }
+        return rentRepository.save(rent);
+    }
+}
