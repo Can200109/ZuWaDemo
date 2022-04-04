@@ -39,6 +39,6 @@ public class UserService {
             addUser(user);
             return "账户不存在，注册并登录成功。";
         }
-        return "登录成功";
+        return "phoneNumber";
     }
 }

@@ -7,13 +7,15 @@ import com.example.zuwademo.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -34,9 +36,29 @@ public class ProductController {
     }
 
     @PostMapping("/addProduct")
-    public Result<Product> addProduct(@Valid Product product, BindingResult bindingResult) {
+    public Result<Product> addProduct(@Valid @RequestParam(value = "file") MultipartFile file,Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
+        }
+        if (file.isEmpty()) {
+            return ResultUtil.error("文件是空的");
+        }else {
+            String fileName = file.getOriginalFilename();  // 文件名
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+            String filePath = "D://ZuWaData//"+product.getProductId()+"//"; // 上传后的路径
+            fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
+            File dest = new File(filePath + fileName);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            try {
+                file.transferTo(dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String filename ="/zuwaPhoto/"+fileName;
+            System.out.println(filename);
+            product.setProductPhoto(filename);
         }
         product = productService.addProduct(product);
         return ResultUtil.success(product);
@@ -47,6 +69,7 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
         }
+
         product = productService.addProduct(product);
         return ResultUtil.success(product);
     }
@@ -61,4 +84,5 @@ public class ProductController {
         product = productService.deleteProduct(product);
         return ResultUtil.success(product);
     }
+
 }

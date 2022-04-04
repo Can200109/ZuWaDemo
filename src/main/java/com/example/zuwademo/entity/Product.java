@@ -1,6 +1,7 @@
 package com.example.zuwademo.entity;
 
 import lombok.Data;
+import lombok.Generated;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;

@@ -12,6 +12,8 @@ spring:
       password: root
     url: jdbc:mysql://localhost:3306/zuwa_db?serverTimezone=GMT%2b8
   jpa:
+    hibernate:
+      ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true

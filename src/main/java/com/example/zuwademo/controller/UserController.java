@@ -44,7 +44,6 @@ public class UserController {
     }
 
     @PostMapping("/editUser")
-    @CheckLogin
     public Result<User> modifyUser(@Valid User user, BindingResult bindingResult) {//根据手机号进行修改，先查找出来再保存。安卓页面实现点击修改按钮显示用户的信息
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
