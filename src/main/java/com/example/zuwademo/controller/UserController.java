@@ -37,30 +37,11 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public Result<User> addUser(@Valid @RequestParam(value = "file") MultipartFile file, User user, BindingResult bindingResult) {
+    public Result<User> addUser(@Valid  User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
         }
-        if (file.isEmpty()) {
-            return ResultUtil.error("文件是空的");
-        }else {
-            String fileName = file.getOriginalFilename();  // 文件名
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-            String filePath = "D://ZuWaData//"+user.getPhoneNumber()+"//"; // 上传后的路径
-            fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
-            File dest = new File(filePath + fileName);
-            if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
-            }
-            try {
-                file.transferTo(dest);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String filename ="/zuwaPhoto/"+fileName;
-            System.out.println(filename);
-            user.setUserPhoto(filename);
-        }
+
         user = userService.addUser(user);
         return ResultUtil.success(user);
     }
@@ -87,6 +68,35 @@ public class UserController {
     @PostMapping("/findUserByPhoneNumber")
     public Result<User> findUserByPhoneNumber(@RequestParam String phoneNumber) {
         return ResultUtil.success(userService.findUserByPhoneNumber(phoneNumber));
+    }
+    @PostMapping("/uploadPhoto")
+    public Result uploadPhoto( @Valid @RequestParam(value = "file") MultipartFile file,User user,BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
+        }
+        user=userService.findUserByPhoneNumber(user.getPhoneNumber());
+        if (file.isEmpty()) {
+            return ResultUtil.error("文件是空的");
+        }else {
+            String fileName = file.getOriginalFilename();  // 文件名
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+            String filePath = "D://ZuWaData//"+user.getPhoneNumber()+"//"; // 上传后的路径
+            fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
+            File dest = new File(filePath + fileName);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            try {
+                file.transferTo(dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String filename =fileName;
+            System.out.println(filename);
+            user.setUserPhoto(filename);
+            userService.addUser(user);
+        }
+        return ResultUtil.success("添加成功");
     }
 
 }

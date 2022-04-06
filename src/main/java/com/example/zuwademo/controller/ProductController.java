@@ -35,30 +35,33 @@ public class ProductController {
     }
 
     @PostMapping("/addProduct")
-    public Result<Product> addProduct(@Valid @RequestParam(value = "file") MultipartFile file,Product product, BindingResult bindingResult) {
+    public Result<Product> addProduct(@Valid @RequestParam(value = "file") MultipartFile[] files,Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
         }
-        if (file.isEmpty()) {
-            return ResultUtil.error("文件是空的");
-        }else {
-            String fileName = file.getOriginalFilename();  // 文件名
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-            String filePath = "D://ZuWaData//"+product.getProductId()+"//"; // 上传后的路径
-            fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
-            File dest = new File(filePath + fileName);
-            if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
+        for(MultipartFile file:files){
+            if (file.isEmpty()) {
+                return ResultUtil.error("文件是空的");
+            }else {
+                String fileName = file.getOriginalFilename();  // 文件名
+                String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+                String filePath = "D://ZuWaData//"+product.getProductId()+"//"; // 上传后的路径
+                fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
+                File dest = new File(filePath + fileName);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                try {
+                    file.transferTo(dest);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String filename ="/zuwaPhoto/"+fileName;
+                System.out.println(filename);
+                product.setProductPhoto(filename);
             }
-            try {
-                file.transferTo(dest);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String filename ="/zuwaPhoto/"+fileName;
-            System.out.println(filename);
-            product.setProductPhoto(filename);
         }
+
         product = productService.addProduct(product);
         return ResultUtil.success(product);
     }
@@ -83,7 +86,7 @@ public class ProductController {
         product = productService.deleteProduct(product);
         return ResultUtil.success(product);
     }
-    @PostMapping("/findProductByProudctType")
+    @PostMapping("/findProductByProductType")
     public Result<List<Product>> findProductByProductType(@RequestParam("productType") String productType){
         return ResultUtil.success(productService.findProductByType(productType));
     }
