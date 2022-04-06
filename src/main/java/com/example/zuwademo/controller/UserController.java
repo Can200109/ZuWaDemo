@@ -1,6 +1,5 @@
 package com.example.zuwademo.controller;
 
-import com.example.zuwademo.auth.CheckLogin;
 import com.example.zuwademo.domain.Result;
 import com.example.zuwademo.entity.User;
 import com.example.zuwademo.service.UserService;
