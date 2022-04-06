@@ -2,8 +2,10 @@ package com.example.zuwademo.controller;
 
 import com.example.zuwademo.domain.Result;
 import com.example.zuwademo.entity.Product;
+import com.example.zuwademo.entity.User;
 import com.example.zuwademo.service.ProductService;
 import com.example.zuwademo.utils.ResultUtil;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,32 +38,11 @@ public class ProductController {
     }
 
     @PostMapping("/addProduct")
-    public Result<Product> addProduct(@Valid @RequestParam(value = "file") MultipartFile[] files,Product product, BindingResult bindingResult) {
+    public Result<Product> addProduct(@Valid Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
         }
-        for(MultipartFile file:files){
-            if (file.isEmpty()) {
-                return ResultUtil.error("文件是空的");
-            }else {
-                String fileName = file.getOriginalFilename();  // 文件名
-                String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-                String filePath = "D://ZuWaData//"+product.getProductId()+"//"; // 上传后的路径
-                fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
-                File dest = new File(filePath + fileName);
-                if (!dest.getParentFile().exists()) {
-                    dest.getParentFile().mkdirs();
-                }
-                try {
-                    file.transferTo(dest);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String filename ="/zuwaPhoto/"+fileName;
-                System.out.println(filename);
-                product.setProductPhoto(filename);
-            }
-        }
+
 
         product = productService.addProduct(product);
         return ResultUtil.success(product);
@@ -94,5 +76,38 @@ public class ProductController {
     public Result<Product> findProductById(@RequestParam("productId") String productId){
         return ResultUtil.success(productService.findProductById(productId));
     }
+    @PostMapping("/uploadPhoto")
+    public Result uploadPhoto(@Valid @RequestParam(value = "file") MultipartFile[] files, Product product, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
+        }
+        product=productService.findProductById(product.getProductId());
+        List<String> photos = new ArrayList<>();
+        for(MultipartFile file:files){
+            if (file.isEmpty()) {
+                return ResultUtil.error("文件是空的");
+            }else {
+                String fileName = file.getOriginalFilename();  // 文件名
+                String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+                String filePath = "D://ZuWaData//"+product.getPhoneNumber()+"//"+product.getProductId()+"//"; // 上传后的路径
+                fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
+                File dest = new File(filePath + fileName);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                try {
+                    file.transferTo(dest);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String filename =fileName;
+                photos.add(filename);
 
+            }
+            Gson gson = new Gson();
+            String photosJson = gson.toJson(photos);
+            product.setProductPhoto(photosJson);
+        }
+        return ResultUtil.success("添加成功");
+    }
 }
