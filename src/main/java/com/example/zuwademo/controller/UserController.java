@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -33,11 +37,29 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    //@Valid数据验证
-
-    public Result<User> addUser(@Valid User user, BindingResult bindingResult) {
+    public Result<User> addUser(@Valid @RequestParam(value = "file") MultipartFile file, User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(bindingResult.getFieldError().getDefaultMessage());
+        }
+        if (file.isEmpty()) {
+            return ResultUtil.error("文件是空的");
+        }else {
+            String fileName = file.getOriginalFilename();  // 文件名
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+            String filePath = "D://ZuWaData//"+user.getPhoneNumber()+"//"; // 上传后的路径
+            fileName = UUID.randomUUID().toString().replace("-", "") + suffixName; // 新文件名
+            File dest = new File(filePath + fileName);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            try {
+                file.transferTo(dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String filename ="/zuwaPhoto/"+fileName;
+            System.out.println(filename);
+            user.setUserPhoto(filename);
         }
         user = userService.addUser(user);
         return ResultUtil.success(user);

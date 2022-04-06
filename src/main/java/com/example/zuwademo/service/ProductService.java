@@ -38,4 +38,10 @@ public class ProductService {
         productRepository.deleteById(product.getProductId());
         return product;
     }
+    public List<Product> findProductByType(String productType){
+        return productRepository.findProductByProductType(productType);
+    }
+    public Product findProductById(String productId){
+        return productRepository.findProductByProductId(productId);
+    }
 }

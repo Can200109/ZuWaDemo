@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -83,6 +82,14 @@ public class ProductController {
     public Result<Product> deleteProduct(Product product){
         product = productService.deleteProduct(product);
         return ResultUtil.success(product);
+    }
+    @PostMapping("/findProductByProudctType")
+    public Result<List<Product>> findProductByProductType(@RequestParam("productType") String productType){
+        return ResultUtil.success(productService.findProductByType(productType));
+    }
+    @PostMapping("/findProductById")
+    public Result<Product> findProductById(@RequestParam("productId") String productId){
+        return ResultUtil.success(productService.findProductById(productId));
     }
 
 }

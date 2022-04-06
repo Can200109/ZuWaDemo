@@ -13,6 +13,7 @@ public class User {
     private String userId;
     private String userName;
     private String userPassword;
+    private String userPhoto;
     @Id
     @NotEmpty(message = "手机号不能为空")
     @Length(min = 11, max = 11, message = "手机号必须为11位")
