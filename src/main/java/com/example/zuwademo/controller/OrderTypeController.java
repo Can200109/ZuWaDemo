@@ -18,11 +18,11 @@ public class OrderTypeController {
     OrderTypeService orderTypeService;
 
     @RequestMapping("/addOrder")
-    private Result<Collect> addOrder(OrderType orderType){
+    private Result<OrderType> addOrder(OrderType orderType){
         return ResultUtil.success(orderTypeService.addOrderType(orderType));
     }
     @RequestMapping("/findOrder")
-    private Result<Collect> findOrder(OrderType orderType){
+    private Result<OrderType> findOrder(OrderType orderType){
         return ResultUtil.success(orderTypeService.findOrderTypeByRentPhoneAndType(orderType.getRentPhone(), orderType.getType()));
     }
     @RequestMapping("/deleteOrder")
