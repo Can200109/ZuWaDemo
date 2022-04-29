@@ -51,9 +51,8 @@ public class RentController {
         return ResultUtil.success(rent);
     }
 
-    @PostMapping("/deleteRentByPhoneNumber")
-    public Result<Rent> deleteRentByPhoneNumber(Rent rent) {
-        rent = rentService.deleteRentByPhoneNumber(rent);
-        return ResultUtil.success(rent);
+    @PostMapping("/deleteRent")
+    public void deleteRent(Rent rent) {
+        rentService.deleteRent(rent);
     }
 }

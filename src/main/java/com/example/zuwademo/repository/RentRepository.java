@@ -7,4 +7,5 @@ public interface RentRepository extends JpaRepository<Rent, String> {
     Rent deleteByPhoneNumber(String phoneNumber);
 
     Rent findByPhoneNumber(String phoneNumber);
+    Rent findByRentId(String rentId);
 }

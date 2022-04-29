@@ -13,9 +13,9 @@ public class RentService {
     @Autowired
     private RentRepository rentRepository;
 
-    public Rent deleteRentByPhoneNumber(Rent rent) {
-        rent = rentRepository.deleteByPhoneNumber(rent.getPhoneNumber());
-        return rent;
+    public void deleteRent(Rent rent) {
+        rent = rentRepository.findByRentId(rent.getRentId());
+        rentRepository.delete(rent);
     }
 
     public List<Rent> findAllRents() {
