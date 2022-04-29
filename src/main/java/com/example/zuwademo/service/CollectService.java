@@ -15,15 +15,15 @@ public class CollectService {
 
 
     public Collect addCollect(Collect collect) {
-        if (collect.getCollectId() == null || "".equals(collect.getCollectId())) {
+        if(findCollect(collect.getProductId(),collect.getPhoneNumber())==null){
             collect.setCollectId(UUID.randomUUID().toString());
         }
-
         return collectRepository.save(collect);
     }
 
     public void delete(Collect collect) {
-        collectRepository.delete(collect);
+        collect = findCollect(collect.getProductId(),collect.getPhoneNumber());
+       collectRepository.delete(collect);
     }
     public Collect findCollect(String productId,String phoneNumber){
         return collectRepository.findCollectByProductIdAndPhoneNumber(productId, phoneNumber);
