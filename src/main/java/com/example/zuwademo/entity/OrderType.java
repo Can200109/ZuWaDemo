@@ -13,4 +13,5 @@ public class OrderType {
     private String rentPhone;
     private String type;
     private String productPhone;
+    private String productId;
 }
