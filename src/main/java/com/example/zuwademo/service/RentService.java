@@ -22,8 +22,8 @@ public class RentService {
         return rentRepository.findAll();
     }
 
-    public List<Rent> findRentByPhoneNumber(Rent rent) {
-        List<Rent> rents = (List<Rent>) rentRepository.findByPhoneNumber(rent.getPhoneNumber());
+    public List<Rent> findRentByPhoneNumber(String phoneNumber) {
+        List<Rent> rents = rentRepository.findByPhoneNumber(phoneNumber);
         return rents;
     }
 

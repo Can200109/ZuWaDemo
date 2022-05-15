@@ -31,8 +31,8 @@ public class ProductService {
         return products;
     }
 
-    public Product findProductByPhoneNumber(Product product) {
-        return productRepository.findProductByPhoneNumber(product.getPhoneNumber());
+    public List<Product> findProductByPhoneNumber(String phoneNumber) {
+        return productRepository.findProductByPhoneNumber(phoneNumber);
     }
     public Product deleteProduct(Product product){
         productRepository.deleteById(product.getProductId());

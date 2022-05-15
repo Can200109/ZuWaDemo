@@ -7,6 +7,7 @@ import com.example.zuwademo.repository.OrderTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,7 +17,7 @@ public class OrderTypeService {
 
 
     public OrderType addOrderType(OrderType orderType) {
-        if(find(orderType.getRentPhone(),orderType.getProductPhone())==null){
+        if(orderType.getOrderId()==null){
             orderType.setOrderId(UUID.randomUUID().toString());
         }
         return orderTypeRepository.save(orderType);
@@ -26,8 +27,8 @@ public class OrderTypeService {
         orderType = find(orderType.getRentPhone(),orderType.getProductPhone());
         orderTypeRepository.delete(orderType);
     }
-    public OrderType findOrderTypeByRentPhoneAndType(String rentPhone,String type){
-        return orderTypeRepository.findOrderTypeByRentPhoneAndProductPhone(rentPhone, type);
+    public List<OrderType> findOrderTypeByRentPhoneAndType(String rentPhone, String type){
+        return orderTypeRepository.findOrderTypeByRentPhoneAndType(rentPhone, type);
     }
     public OrderType find(String rentPhone,String productPhone){
         return orderTypeRepository.findOrderTypeByRentPhoneAndProductPhone(rentPhone, productPhone);

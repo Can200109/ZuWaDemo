@@ -20,5 +20,6 @@ public class Rent {
     @NotEmpty(message = "手机号不能为空")
     @Length(min = 11, max = 11, message = "手机号必须为11位")
     private String phoneNumber;//外键
+    private String ownerPhoneNumber;
     private String productId;//外键
 }

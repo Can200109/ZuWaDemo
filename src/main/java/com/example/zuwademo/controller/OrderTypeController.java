@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/orderType")
 @Transactional
@@ -22,7 +24,7 @@ public class OrderTypeController {
         return ResultUtil.success(orderTypeService.addOrderType(orderType));
     }
     @RequestMapping("/findOrder")
-    private Result<OrderType> findOrder(OrderType orderType){
+    private Result<List<OrderType>> findOrder(OrderType orderType){
         return ResultUtil.success(orderTypeService.findOrderTypeByRentPhoneAndType(orderType.getRentPhone(), orderType.getType()));
     }
     @RequestMapping("/deleteOrder")

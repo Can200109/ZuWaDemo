@@ -14,4 +14,5 @@ public class OrderType {
     private String type;
     private String productPhone;
     private String productId;
+
 }

@@ -7,10 +7,7 @@ import com.example.zuwademo.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,8 +26,8 @@ public class RentController {
     }
 
     @PostMapping("/findRentByPhoneNumber")
-    public Result<Rent> findRentByPhoneNumber(@Valid Rent rent) {
-        return ResultUtil.success(rentService.findRentByPhoneNumber(rent));
+    public Result<List<Rent>> findRentByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
+        return ResultUtil.success(rentService.findRentByPhoneNumber(phoneNumber));
     }
 
     @PostMapping("/addRent")

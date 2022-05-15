@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/collect")
 @Transactional
@@ -23,6 +25,11 @@ public class CollectController {
     @RequestMapping("/findCollect")
     private Result<Collect> findCollect(Collect collect){
         return ResultUtil.success(collectService.findCollect(collect.getProductId(),collect.getPhoneNumber()));
+    }
+
+    @RequestMapping("/findCollectByPhoneNumber")
+    private Result<List<Collect>> findCollectByPhoneNumber(Collect collect){
+        return ResultUtil.success(collectService.findCollectByPhoneNumber(collect.getPhoneNumber()));
     }
     @RequestMapping("/deleteCollect")
     private void deleteCollect(Collect collect){

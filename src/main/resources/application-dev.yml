@@ -2,6 +2,8 @@ server:
   port: 8080
   servlet:
     context-path: /zuwa
+    address: 10.7.88.152
+#    address: 192.168.31.22
 spring:
 
   profiles:
@@ -10,7 +12,7 @@ spring:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
-      password: root
+      password: mengxiaoheng
     url: jdbc:mysql://localhost:3306/zuwa_db?serverTimezone=GMT%2b8
   jpa:
     hibernate:

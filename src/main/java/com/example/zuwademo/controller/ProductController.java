@@ -32,8 +32,8 @@ public class ProductController {
     }
 
     @PostMapping("/findProductByPhoneNumber")
-    public Result<Product> findProductByPhoneNumber(@Valid Product product) {
-        return ResultUtil.success(productService.findProductByPhoneNumber(product));
+    public Result<List<Product>> findProductByPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
+        return ResultUtil.success(productService.findProductByPhoneNumber(phoneNumber));
     }
 
     @PostMapping("/addProduct")
